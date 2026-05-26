@@ -1,0 +1,28 @@
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
+
+# Build artifacts
+pkg/
+mkmf.log
+*.o
+*.gem
+*.so
+*.bundle
+ext/rapidyaml/Makefile
+ext/rapidyaml/*.o
+ext/rapidyaml/*.so
+ext/rapidyaml/*.bundle
+ext/rapidyaml/mkmf.log
+lib/rapidyaml/rapidyaml.so
+lib/rapidyaml/rapidyaml.bundle
+tmp/
+
+# Vendored test fixtures (checked out at dev time, not committed)
+vendor/yaml-test-suite/
