@@ -7,7 +7,9 @@ require 'mkmf-rice'
 
 $CXXFLAGS += ' -std=c++17 -O2'
 
-$LDFLAGS += ' -static-libstdc++ -static-libgcc'
+unless RbConfig::CONFIG['host_os'] =~ /darwin/
+  $LDFLAGS += ' -static-libstdc++ -static-libgcc'
+end
 
 create_makefile('rapidyaml/rapidyaml')
 
