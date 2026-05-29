@@ -2,6 +2,26 @@
 
 Fast YAML parsing for Ruby via [rapidyaml](https://github.com/biojppm/rapidyaml) — a C++ YAML library. Drop-in replacement for Psych.
 
+## Benchmarketing
+
+```
+> cd benchmarketing
+> ruby psych_load_vs_rapidyaml_load.rb
+ruby 3.4.9 (2026-03-11 revision 76cca827ab) +PRISM [x86_64-linux]
+Warming up --------------------------------------
+               psych     5.000 i/100ms
+           rapidyaml    23.000 i/100ms
+Calculating -------------------------------------
+               psych     58.235 (± 1.7%) i/s   (17.17 ms/i) -    585.000 in  10.045480s
+           rapidyaml    237.917 (± 1.3%) i/s    (4.20 ms/i) -      2.392k in  10.053920s
+
+Comparison:
+rapidyaml:      237.9 i/s
+    psych:       58.2 i/s - 4.09x  slower
+```
+
+I have received results varying from about 3-4x faster - as always, YMMV.
+
 ## Installation
 
 ```ruby
