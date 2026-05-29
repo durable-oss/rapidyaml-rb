@@ -2,6 +2,8 @@ name: Build and publish gem
 
 on:
   push:
+    branches:
+      - "**"
     tags:
       - "v*"
   pull_request:
@@ -31,6 +33,7 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
+          bundler-opts: "--without lint"
 
       - name: Compile extension
         run: bundle exec rake compile
@@ -65,6 +68,7 @@ jobs:
         with:
           ruby-version: "3.3"
           bundler-cache: true
+          bundler-opts: "--without lint"
 
       - name: Build native gem (${{ matrix.platform }})
         run: bundle exec rake gem:${{ matrix.platform }}
@@ -98,6 +102,7 @@ jobs:
         with:
           ruby-version: "3.3"
           bundler-cache: true
+          bundler-opts: "--without lint"
 
       - name: Compile extension
         run: bundle exec rake compile
@@ -125,6 +130,7 @@ jobs:
         with:
           ruby-version: "3.3"
           bundler-cache: true
+          bundler-opts: "--without lint"
 
       - run: bundle exec rake build
 

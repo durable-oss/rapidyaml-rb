@@ -35,6 +35,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake-compiler',       '~> 1.2'
   spec.add_development_dependency 'rake-compiler-dock',  '~> 1.4'
   spec.add_development_dependency 'rice',                '~> 4.0'
-  spec.add_development_dependency 'rubocop',             '> 1.86.0'
-  spec.add_development_dependency 'rubocop-minitest',    '> 0.39.0'
 end
