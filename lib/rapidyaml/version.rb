@@ -9,7 +9,7 @@
 # updates during the release process without modifying the main module files.
 
 module RapidYAML
-  VERSION = '0.1.2'
+  VERSION = '0.1.3'
 end
 
 # Copyright (c) 2026 Durable Programming, LLC. All rights reserved.
