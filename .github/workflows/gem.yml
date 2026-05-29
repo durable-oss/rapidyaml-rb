@@ -52,8 +52,8 @@ jobs:
           - x86_64-linux-musl
           - aarch64-linux
           - aarch64-linux-musl
-          - x86_64-darwin
-          - arm64-darwin
+          - arm-linux-gnu
+          - arm-linux-musl
           - x64-mingw-ucrt
 
     steps:
@@ -68,6 +68,42 @@ jobs:
 
       - name: Build native gem (${{ matrix.platform }})
         run: bundle exec rake gem:${{ matrix.platform }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gem-${{ matrix.platform }}
+          path: pkg/*.gem
+
+  # ------------------------------------------------------------------ #
+  # Build darwin gems natively (osxcross can't handle rice 4.1+)        #
+  # ------------------------------------------------------------------ #
+  native-gems-darwin:
+    name: Build ${{ matrix.platform }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: x86_64-darwin
+            runner: macos-13
+          - platform: arm64-darwin
+            runner: macos-14
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Compile extension
+        run: bundle exec rake compile
+
+      - name: Build native gem (${{ matrix.platform }})
+        run: bundle exec rake gem:native
 
       - uses: actions/upload-artifact@v4
         with:
@@ -98,15 +134,16 @@ jobs:
           path: pkg/*.gem
 
   # ------------------------------------------------------------------ #
-  # Publish to RubyGems.org and GitHub Packages                         #
+  # Publish to RubyGems.org via trusted publishing (OIDC)               #
   # ------------------------------------------------------------------ #
   publish:
     name: Publish gems
-    needs: [test, native-gems, source-gem]
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [test, native-gems, native-gems-darwin, source-gem]
     runs-on: ubuntu-latest
     permissions:
-      packages: write
-      contents: read
+      contents: write
+      id-token: write
 
     steps:
       - uses: actions/download-artifact@v4
@@ -119,32 +156,4 @@ jobs:
         with:
           ruby-version: "3.3"
 
-      - name: Publish to RubyGems.org
-        env:
-          GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
-        run: |
-          mkdir -p ~/.gem
-          cat > ~/.gem/credentials <<EOF
-          ---
-          :rubygems_api_key: ${GEM_HOST_API_KEY}
-          EOF
-          chmod 0600 ~/.gem/credentials
-          for gem in pkg/*.gem; do
-            gem push "$gem" || true
-          done
-
-      - name: Publish to GitHub Packages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          mkdir -p ~/.gem
-          cat > ~/.gem/credentials <<EOF
-          ---
-          :github: Bearer ${GITHUB_TOKEN}
-          EOF
-          chmod 0600 ~/.gem/credentials
-          for gem in pkg/*.gem; do
-            gem push \
-              --host https://rubygems.pkg.github.com/${{ github.repository_owner }} \
-              "$gem" || true
-          done
+      - uses: rubygems/release-gem@v1

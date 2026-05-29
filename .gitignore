@@ -26,3 +26,4 @@ tmp/
 
 # Vendored test fixtures (checked out at dev time, not committed)
 vendor/yaml-test-suite/
+scratch/

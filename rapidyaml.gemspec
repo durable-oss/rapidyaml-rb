@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.summary     = 'Fast YAML parsing and emission via rapidyaml — drop-in Psych replacement'
   spec.description = 'Ruby bindings to rapidyaml (ryml), a C++ YAML library. ' \
                      'Exposes a Psych-compatible API so it can be used as a drop-in replacement.'
-  spec.homepage    = 'https://github.com/durableprogramming/rapidyaml-rb'
+  spec.homepage    = 'https://github.com/durable-oss/rapidyaml'
   spec.license     = 'MIT'
   spec.required_ruby_version = '>= 3.1.0'
 
