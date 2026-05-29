@@ -4,7 +4,5 @@ source 'https://rubygems.org'
 
 gemspec
 
-group :lint do
-  gem 'rubocop',          '> 1.86.0'
-  gem 'rubocop-minitest', '> 0.39.0'
-end
+gem 'rubocop',          '> 1.50.0'
+gem 'rubocop-minitest', '> 0.39.0'
