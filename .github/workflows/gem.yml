@@ -132,7 +132,7 @@ jobs:
           bundler-cache: true
           bundler-opts: "--without lint"
 
-      - run: bundle exec rake build
+      - run: bundle exec rake gem
 
       - uses: actions/upload-artifact@v4
         with:
